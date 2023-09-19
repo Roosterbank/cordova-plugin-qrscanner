@@ -11,7 +11,8 @@
   "scripts": {
     "build": "gulp && npm run clean-build",
     "clean-build": "trash dist/plugin.min.js && trash dist/www.min.js && trash src/browser/worker.min.js",
-    "prep-release": "git clean -dfx && npm install && npm run build"
+    "prep-release": "git clean -dfx && npm install && npm run build",
+    "test": ""
   },
   "repository": {
     "type": "git",
