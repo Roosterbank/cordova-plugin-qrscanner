@@ -1,5 +1,5 @@
-<a name="3.0.2"></a>
-## [3.0.2](https://github.com/Roosterbank/cordova-plugin-qrscanner/compare/2.6.0...3.0.2) (2023-09-19)
+<a name="3.0.3"></a>
+## [3.0.3](https://github.com/Roosterbank/cordova-plugin-qrscanner/compare/2.6.0...3.0.3) (2023-09-19)
 
 ### Features
 
