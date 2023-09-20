@@ -1,6 +1,6 @@
 {
-  "name": "@roosterbank/cordova-plugin-qrscanner",
-  "version": "3.0.3",
+  "name": "@rooster/cordova-plugin-qrscanner",
+  "version": "3.0.4",
   "description": "Fast, energy-efficient, highly-configurable QR code scanner.",
   "cordova": {
     "id": "cordova-plugin-qrscanner",
