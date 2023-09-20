@@ -1,3 +1,10 @@
+<a name="3.0.6"></a>
+## [3.0.6](https://github.com/Roosterbank/cordova-plugin-qrscanner/compare/2.6.0...3.0.3) (2023-09-19)
+
+### Features
+
+* **android:** Updated for gradle 7
+
 <a name="3.0.1"></a>
 ## [3.0.1](https://github.com/bitpay/cordova-plugin-qrscanner/compare/2.6.0...3.0.1) (2019-03-29)
 
