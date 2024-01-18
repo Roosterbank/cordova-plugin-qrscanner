@@ -1,5 +1,14 @@
+<a name="3.0.7"></a>
+## [3.0.7](https://github.com/Roosterbank/cordova-plugin-qrscanner/) (2024-01-18)
+
+### Features
+
+* added build output to plugin to avoid publication
+* tweaked ios code
+* removed windows
+
 <a name="3.0.6"></a>
-## [3.0.6](https://github.com/Roosterbank/cordova-plugin-qrscanner/compare/2.6.0...3.0.3) (2023-09-19)
+## [3.0.6](https://github.com/Roosterbank/cordova-plugin-qrscanner/) (2023-09-19)
 
 ### Features
 
