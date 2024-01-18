@@ -30,17 +30,18 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
                 }
             }
             
-            self.videoPreviewLayer?.connection?.videoOrientation = interfaceOrientationToVideoOrientation(UIApplication.shared.statusBarOrientation);
+            let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
+            self.videoPreviewLayer?.connection?.videoOrientation = interfaceOrientationToVideoOrientation(orientation ?? UIInterfaceOrientation.portrait);
         }
-        
-        
+
+
         func addPreviewLayer(_ previewLayer:AVCaptureVideoPreviewLayer?) {
             previewLayer!.videoGravity = AVLayerVideoGravity.resizeAspectFill
             previewLayer!.frame = self.bounds
             self.layer.addSublayer(previewLayer!)
             self.videoPreviewLayer = previewLayer;
         }
-        
+
         func removePreviewLayer() {
             if self.videoPreviewLayer != nil {
                 self.videoPreviewLayer!.removeFromSuperlayer()
@@ -61,6 +62,8 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     var scanning: Bool = false
     var paused: Bool = false
     var nextScanningCommand: CDVInvokedUrlCommand?
+
+    var originalBackgroundColor: UIColor?
 
     enum QRScannerError: Int32 {
         case unexpected_error = 0,
@@ -86,6 +89,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
 
     override func pluginInitialize() {
         super.pluginInitialize()
+        originalBackgroundColor = self.webView.backgroundColor
         NotificationCenter.default.addObserver(self, selector: #selector(pageDidLoad), name: NSNotification.Name.CDVPageDidLoad, object: nil)
         self.cameraView = CameraView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         self.cameraView.autoresizingMask = [.flexibleWidth, .flexibleHeight];
@@ -131,7 +135,6 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
         }
         do {
             if (captureSession?.isRunning != true){
-                cameraView.backgroundColor = UIColor.clear
                 self.webView!.superview!.insertSubview(cameraView, belowSubview: self.webView!)
                 let availableVideoDevices =  AVCaptureDevice.devices(for: AVMediaType.video)
                 for device in availableVideoDevices {
@@ -196,24 +199,22 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
         return captureDeviceInput
     }
 
-    @objc func makeOpaque(){
+    @objc func makeTransparent(){
         self.webView?.isOpaque = false
         self.webView?.backgroundColor = UIColor.clear
     }
 
+    @objc func makeOpaque(){
+        self.webView?.isOpaque = true
+        self.webView?.backgroundColor = originalBackgroundColor
+    }
+
     @objc func boolToNumberString(bool: Bool) -> String{
-        if(bool) {
-            return "1"
-        } else {
-            return "0"
-        }
+        return bool ? "1" : "0"
     }
 
     @objc func configureLight(command: CDVInvokedUrlCommand, state: Bool){
-        var useMode = AVCaptureDevice.TorchMode.on
-        if(state == false){
-            useMode = AVCaptureDevice.TorchMode.off
-        }
+        let useMode = state == true ? AVCaptureDevice.TorchMode.on : AVCaptureDevice.TorchMode.off
         do {
             // torch is only available for back camera
             if(backCamera == nil || backCamera!.hasTorch == false || backCamera!.isTorchAvailable == false || backCamera!.isTorchModeSupported(useMode) == false){
@@ -247,8 +248,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     @objc func pageDidLoad() {
-        self.webView?.isOpaque = false
-        self.webView?.backgroundColor = UIColor.clear
+        self.makeOpaque()
     }
 
     // ---- BEGIN EXTERNAL API ----
@@ -290,8 +290,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     @objc func show(_ command: CDVInvokedUrlCommand) {
-        self.webView?.isOpaque = false
-        self.webView?.backgroundColor = UIColor.clear
+        self.makeTransparent()
         self.getStatus(command)
     }
 
