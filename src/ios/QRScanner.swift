@@ -96,7 +96,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     func sendErrorCode(command: CDVInvokedUrlCommand, error: QRScannerError){
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.rawValue)
+      let pluginResult = CDVPluginResult(status: CDVCommandStatus.error, messageAs: error.rawValue)
         commandDelegate!.send(pluginResult, callbackId:command.callbackId)
     }
 
@@ -241,8 +241,8 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
         let found = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
         if found.type == AVMetadataObject.ObjectType.qr && found.stringValue != nil {
             scanning = false
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: found.stringValue)
-            commandDelegate!.send(pluginResult, callbackId: nextScanningCommand?.callbackId!)
+          let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok, messageAs: found.stringValue!)
+          commandDelegate!.send(pluginResult, callbackId: nextScanningCommand!.callbackId)
             nextScanningCommand = nil
         }
     }
@@ -461,13 +461,13 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
             "currentCamera": String(currentCamera)
         ]
 
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: status)
+      let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok, messageAs: status)
         commandDelegate!.send(pluginResult, callbackId:command.callbackId)
     }
 
     @objc func openSettings(_ command: CDVInvokedUrlCommand) {
         if #available(iOS 10.0, *) {
-            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+          guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
             return
         }
         if UIApplication.shared.canOpenURL(settingsUrl) {
@@ -480,7 +480,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
         } else {
             // pre iOS 10.0
             if #available(iOS 8.0, *) {
-                UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
+              UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
                 self.getStatus(command)
             } else {
                 self.sendErrorCode(command: command, error: QRScannerError.open_settings_unavailable)

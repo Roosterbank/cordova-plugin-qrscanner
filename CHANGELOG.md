@@ -1,3 +1,11 @@
+<a name="3.0.8"></a>
+## [3.0.8](https://github.com/Roosterbank/cordova-plugin-qrscanner/) (2026-06-10)
+
+### Features
+
+* **iOS:** removed swift support plugin dependency
+
+
 <a name="3.0.7"></a>
 ## [3.0.7](https://github.com/Roosterbank/cordova-plugin-qrscanner/) (2024-01-18)
 
